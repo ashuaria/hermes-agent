@@ -459,7 +459,7 @@ def _run_review_in_thread(
             review_whitelist = {
                 t["function"]["name"]
                 for t in get_tool_definitions(
-                    enabled_toolsets=["memory", "skills"],
+                    enabled_toolsets=["memory", "skills", "file"],
                     quiet_mode=True,
                 )
             }

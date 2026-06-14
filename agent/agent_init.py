@@ -464,6 +464,20 @@ def init_agent(
     agent.request_overrides = dict(request_overrides or {})
     agent.prefill_messages = prefill_messages or []  # Prefilled conversation turns
     agent._force_ascii_payload = False
+    try:
+        _reasoning_effort = ""
+        _rc = reasoning_config if isinstance(reasoning_config, dict) else {}
+        if "effort" in _rc:
+            _reasoning_effort = str(_rc.get("effort") or "").strip()
+    except Exception:
+        _reasoning_effort = ""
+    logger.info(
+        "Reasoning effort initialized: '%s' | model=%s provider=%s session=%s",
+        _reasoning_effort,
+        model,
+        agent.provider,
+        session_id,
+    )
     
     # Anthropic prompt caching: auto-enabled for Claude models on native
     # Anthropic, OpenRouter, and third-party gateways that speak the

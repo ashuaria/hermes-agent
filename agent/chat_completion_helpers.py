@@ -183,6 +183,22 @@ def interruptible_api_call(agent, api_kwargs: dict):
 
     def _call():
         try:
+            _effort = ""
+            try:
+                _rc = getattr(agent, "reasoning_config", None)
+                if isinstance(_rc, dict):
+                    _effort = str(_rc.get("effort") or "").strip()
+            except Exception:
+                _effort = ""
+            if _effort:
+                logger.info(
+                    "LLM call | effort=%s model=%s provider=%s api_mode=%s session=%s",
+                    _effort,
+                    api_kwargs.get("model") or getattr(agent, "model", ""),
+                    agent.provider,
+                    agent.api_mode,
+                    getattr(agent, "session_id", ""),
+                )
             if agent.api_mode == "codex_responses":
                 request_client = _set_request_client(
                     agent._create_request_openai_client(
